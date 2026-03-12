@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useSignOut } from "@/hooks/useAuth";
 import { useAppContext } from "@/App";
 import { useNavigate } from "react-router";
+import Logo from "@/assets/notes.svg";
 
 const Header = ({ onMenuClick }: { onMenuClick?: () => void }) => {
   const { user } = useAppContext();
@@ -26,11 +27,7 @@ const Header = ({ onMenuClick }: { onMenuClick?: () => void }) => {
           </Button>
           <Link to="/">
             <div className="flex items-center gap-2">
-              <img
-                src="/src/assets/notes.svg"
-                alt="notes"
-                className="w-12 h-12"
-              />
+              <img src={Logo} alt="notes" className="w-12 h-12" />
 
               <h1 className="font-bold text-2xl">Notes</h1>
             </div>

@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation, Navigate } from "react-router";
 import { ModeToggle } from "@/components/mode-toggle";
 import { useAppContext } from "@/App";
+import Logo from "@/assets/notes.svg";
 const AuthLayout = () => {
   const { pathname } = useLocation();
   const { user } = useAppContext();
@@ -13,9 +14,11 @@ const AuthLayout = () => {
     <>
       <div className="py-3 px-5 border-b">
         <div className="flex justify-between">
-          <h1 className="font-bold text-2xl">
-            <Link to={"/"}>Name</Link>
-          </h1>
+          <div className="flex items-center gap-2">
+            <img src={Logo} alt="notes" className="w-12 h-12" />
+
+            <h1 className="font-bold text-2xl">Notes</h1>
+          </div>
           <nav className="flex gap-4 items-center">
             {pathname === "/sign-in" ? (
               <Link to={"/sign-up"}>SignUp</Link>
