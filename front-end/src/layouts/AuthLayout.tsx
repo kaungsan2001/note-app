@@ -1,11 +1,8 @@
-import { Link, Outlet, useLocation, useNavigate, Navigate } from "react-router";
-import { Button } from "@/components/ui/button";
+import { Link, Outlet, useLocation, Navigate } from "react-router";
 import { ModeToggle } from "@/components/mode-toggle";
-import { ArrowLeft } from "lucide-react";
 import { useAppContext } from "@/App";
 const AuthLayout = () => {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const { user } = useAppContext();
 
   if (user) {

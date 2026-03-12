@@ -24,7 +24,17 @@ const Header = ({ onMenuClick }: { onMenuClick?: () => void }) => {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="font-bold text-2xl">Notes</h1>
+          <Link to="/">
+            <div className="flex items-center gap-2">
+              <img
+                src="/src/assets/notes.svg"
+                alt="notes"
+                className="w-12 h-12"
+              />
+
+              <h1 className="font-bold text-2xl">Notes</h1>
+            </div>
+          </Link>
         </div>
         <nav className="flex gap-4 items-center">
           <div className="hidden md:flex gap-4 items-center">

@@ -14,7 +14,7 @@ const NoteCard = ({ note }: { note: NoteType }) => {
   return (
     <Card>
       <CardTitle className="line-clamp-1 px-3">{note.title}</CardTitle>
-      <CardContent className="line-clamp-2">{note.content}</CardContent>
+      <CardContent className="line-clamp-2 flex-1">{note.content}</CardContent>
       <CardFooter className="flex gap-4 justify-end">
         <div className="flex-1">
           {note.publish ? (

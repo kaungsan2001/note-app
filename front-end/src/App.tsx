@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import HomeLayout from "./layouts/HomeLayout";
 import HomePage from "./pages/user/HomePage";
 import AboutPage from "./pages/user/AboutPage";

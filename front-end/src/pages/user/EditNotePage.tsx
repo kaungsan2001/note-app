@@ -33,23 +33,17 @@ const EditNotePage = () => {
     formState: { errors },
     reset,
   } = useForm<NoteCreatePayLoad>({
-    defaultValues: {
-      title: "",
-      content: "",
-      publish: false,
-    },
     resolver: zodResolver(NoteCreateSchema),
   });
 
   useEffect(() => {
     if (noteData?.data) {
-      const note = noteData.data;
       reset({
-        title: note.title,
-        content: note.content,
-        publish: note.publish,
+        title: noteData.data.title,
+        content: noteData.data.content,
+        publish: noteData.data.publish,
       });
-      setChecked(note.publish);
+      setChecked(noteData.data.publish);
     }
   }, [noteData, reset]);
 
@@ -108,7 +102,7 @@ const EditNotePage = () => {
           </Field>
 
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Updating..." : "Update Note"}
+            {isPending ? "Saving..." : "Save"}
           </Button>
         </Card>
       </form>
