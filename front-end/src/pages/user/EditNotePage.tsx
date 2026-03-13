@@ -14,8 +14,6 @@ import {
   FieldTitle,
 } from "@/components/ui/field";
 import { useUpdateANoteById, useGetANoteById } from "@/hooks/useNote";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import Loading from "@/components/web/Loading";
@@ -25,36 +23,31 @@ const EditNotePage = () => {
   const id = Number(noteId);
   const navigate = useNavigate();
   const { data: noteData, isLoading: isNoteLoading } = useGetANoteById(id);
-  const [checked, setChecked] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<NoteCreatePayLoad>({
+    values: {
+      title: noteData?.data.title || "",
+      content: noteData?.data.content || "",
+      publish: noteData?.data.publish || false,
+    },
+    resetOptions: {
+      keepDirtyValues: true,
+    },
     resolver: zodResolver(NoteCreateSchema),
   });
-
-  useEffect(() => {
-    if (noteData?.data) {
-      reset({
-        title: noteData.data.title,
-        content: noteData.data.content,
-        publish: noteData.data.publish,
-      });
-      setChecked(noteData.data.publish);
-    }
-  }, [noteData, reset]);
 
   const { mutate, isPending } = useUpdateANoteById();
 
   const onSubmit = (data: NoteCreatePayLoad) => {
-    const attachPublic = { ...data, publish: checked };
-    mutate({ noteId: id, data: attachPublic });
+    console.log(data);
+    mutate({ noteId: id, data });
   };
 
-  if (isNoteLoading) {
+  if (isNoteLoading || !noteData) {
     return <Loading />;
   }
 
@@ -89,10 +82,11 @@ const EditNotePage = () => {
           </Field>
 
           <Field orientation="horizontal">
-            <Checkbox
+            <input type="checkbox" {...register("publish")} />
+            {/* <Checkbox
               checked={checked}
               onCheckedChange={(state) => setChecked(state === true)}
-            />
+            /> */}
             <FieldContent>
               <FieldTitle>Enable Publish</FieldTitle>
               <FieldDescription>

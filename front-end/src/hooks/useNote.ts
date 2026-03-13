@@ -28,6 +28,7 @@ export function useGetNoteList(page: number) {
 
 export function useUpdateANoteById() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
       noteId,
@@ -38,6 +39,7 @@ export function useUpdateANoteById() {
     }) => updateANoteById(noteId, data),
     onSuccess: () => {
       toast.success("A Note Updated Successfully.");
+      queryClient.invalidateQueries({ queryKey: ["noteList"] });
       navigate("/");
     },
     onError: () => {
