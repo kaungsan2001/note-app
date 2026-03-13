@@ -10,7 +10,6 @@ A full-stack note-taking application built with a modern TypeScript stack. Users
 - **Notes CRUD** — Create, read, update, and delete personal notes with title, content, and publish status
 - **Paginated Note Feed** — Browse notes on the home page with server-side pagination
 - **Role-based Access** — Admin panel for managing users and notes platform-wide
-- **File Uploads** — Image/file upload support via `multer`
 - **Dark / Light Mode** — Theme toggle powered by `next-themes`
 - **Form Validation** — Client-side validation with `react-hook-form` + `zod`, server-side validation with `express-validator`
 
