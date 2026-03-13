@@ -1,25 +1,23 @@
 import { Link, useLocation } from "react-router";
 import { cn } from "@/lib/utils";
-import { type LucideProps } from "lucide-react";
+import { Home, LogOut, Notebook, User, type LucideProps } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
+import { useAppContext } from "@/App";
+import { Button } from "../ui/button";
+import { useSignOut } from "@/hooks/useAuth";
 
 export const Sidebar = ({
   className,
   onLinkClick,
-  navList,
 }: {
   className?: string;
   onLinkClick?: () => void;
-  navList: {
-    url: string;
-    name: string;
-    icon: ForwardRefExoticComponent<
-      Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-    >;
-  }[];
 }) => {
   const location = useLocation();
+  const { user } = useAppContext();
+  const { mutate } = useSignOut();
 
+  const handleSignOut = () => mutate();
   return (
     <div
       className={cn(
@@ -32,25 +30,52 @@ export const Sidebar = ({
           BrandName
         </h2>
         <div className="space-y-1">
-          {navList.map((link) => {
-            const isActive = location.pathname === link.url;
-            return (
-              <Link
-                key={link.url}
-                to={link.url}
-                onClick={onLinkClick}
-                className={cn(
-                  "flex items-center gap-3 rounded-md px-4 py-3 md:py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                  isActive
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground",
-                )}
+          <Link
+            to="/"
+            className={cn(
+              "flex items-center gap-3 rounded-md px-4 py-3 md:py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+              location.pathname === "/"
+                ? "bg-accent text-accent-foreground"
+                : "text-muted-foreground",
+            )}
+          >
+            <Home className="w-5 h-5 md:w-4 md:h-4" />
+            Home
+          </Link>
+          <Link
+            to="/note/create"
+            className={cn(
+              "flex items-center gap-3 rounded-md px-4 py-3 md:py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+              location.pathname === "/note/create"
+                ? "bg-accent text-accent-foreground"
+                : "text-muted-foreground",
+            )}
+          >
+            <Notebook className="w-5 h-5 md:w-4 md:h-4" />
+            New Note
+          </Link>
+
+          {user && (
+            <>
+              {user.role === "admin" && (
+                <Link
+                  to="/admin"
+                  className="flex items-center gap-3 rounded-md px-4 py-3 md:py-2 text-sm text-muted-foreground font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  <User className="w-5 h-5 md:w-4 md:h-4" />
+                  Admin
+                </Link>
+              )}
+              <Button
+                variant="ghost"
+                className="w-full flex items-center gap-3 justify-start pl-4 text-muted-foreground"
+                onClick={handleSignOut}
               >
-                <link.icon className="w-5 h-5 md:w-4 md:h-4" />
-                {link.name}
-              </Link>
-            );
-          })}
+                <LogOut className="w-5 h-5 md:w-4 md:h-4" />
+                Sign Out
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

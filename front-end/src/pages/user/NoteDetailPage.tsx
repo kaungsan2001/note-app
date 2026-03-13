@@ -15,7 +15,7 @@ const NoteDetailPage = () => {
   return (
     <div className="p-5">
       <Button
-        className="ms-1 md:ms-5 lg:ms-5"
+        className="ms-1 md:ms-5 lg:ms-5 mb-3"
         variant={"outline"}
         onClick={() => navigate(-1)}
       >

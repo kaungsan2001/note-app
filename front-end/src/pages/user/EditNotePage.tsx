@@ -52,11 +52,11 @@ const EditNotePage = () => {
   }
 
   return (
-    <div>
+    <div className="px-5">
       <Button
         variant="outline"
         onClick={() => navigate(-1)}
-        className="ms-2 md:ms-7 lg:ms-10 mt-3"
+        className="ms-1 md:ms-7 lg:ms-10 mt-3"
       >
         <ArrowLeft className="mr-2" />
         Back

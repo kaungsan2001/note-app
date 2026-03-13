@@ -41,7 +41,6 @@ const HomeLayout = () => {
         <Sidebar
           className="w-full"
           onLinkClick={() => setIsMobileMenuOpen(false)}
-          navList={navList}
         />
       </aside>
 
