@@ -4,7 +4,7 @@ import { generateToken } from "../helper/token";
 import { hashPassword, comparePassword } from "../helper/hasher";
 import createHttpError from "http-errors";
 import { successResponse } from "../helper/response";
-import { sendCookie } from "../helper/sendCookie";
+import { clearCookie, sendCookie } from "../helper/sendCookie";
 
 export const signUp = async (
   req: Request,
@@ -92,7 +92,7 @@ export const signOut = async (
   next: NextFunction,
 ) => {
   try {
-    res.clearCookie("authToken");
+    clearCookie(res);
     successResponse({
       res,
       status: 200,
