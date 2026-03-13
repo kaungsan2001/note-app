@@ -10,6 +10,7 @@ A full-stack note-taking application built with a modern TypeScript stack. Users
 - **Notes CRUD** — Create, read, update, and delete personal notes with title, content, and publish status
 - **Paginated Note Feed** — Browse notes on the home page with server-side pagination
 - **Role-based Access** — Admin panel for managing users and notes platform-wide
+- **File Uploads** — Image/file upload support via `multer`
 - **Dark / Light Mode** — Theme toggle powered by `next-themes`
 - **Form Validation** — Client-side validation with `react-hook-form` + `zod`, server-side validation with `express-validator`
 
@@ -29,16 +30,32 @@ notes/
 
 ### Tech Stack
 
-| Tool                                                            | Purpose                        |
-| --------------------------------------------------------------- | ------------------------------ |
-| [Bun](https://bun.sh/)                                          | Runtime & package manager      |
-| [Express 5](https://expressjs.com/)                             | HTTP server framework          |
-| [Prisma](https://www.prisma.io/)                                | ORM & database migrations      |
-| [PostgreSQL (Neon)](https://neon.tech/)                         | Serverless PostgreSQL database |
-| [bcrypt](https://github.com/kelektiv/node.bcrypt.js)            | Password hashing               |
-| [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)      | JWT authentication             |
-| [Helmet](https://helmetjs.github.io/)                           | Security headers               |
-| [Zod / express-validator](https://express-validator.github.io/) | Request validation             |
+| Tool                                                        | Purpose                        |
+| ----------------------------------------------------------- | ------------------------------ |
+| [Bun](https://bun.sh/)                                      | Runtime & package manager      |
+| [Express 5](https://expressjs.com/)                         | HTTP server framework          |
+| [Prisma 7](https://www.prisma.io/)                          | ORM & database migrations      |
+| [PostgreSQL (Neon)](https://neon.tech/)                     | Serverless PostgreSQL database |
+| [bcrypt](https://github.com/kelektiv/node.bcrypt.js)        | Password hashing               |
+| [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)  | JWT authentication             |
+| [Multer](https://github.com/expressjs/multer)               | File / image upload handling   |
+| [Helmet](https://helmetjs.github.io/)                       | Security headers               |
+| [cookie-parser](https://github.com/expressjs/cookie-parser) | Cookie parsing                 |
+| [express-validator](https://express-validator.github.io/)   | Request validation             |
+
+### Back-end Source Structure
+
+```
+back-end/src/
+├── controllers/     # Route handler logic (authController, noteController, adminController)
+├── db/              # Prisma client singleton
+├── generated/       # Prisma generated client output
+├── helper/          # Utility helpers (hasher, token, sendCookie, response)
+├── middlewares/     # Express middlewares (auth, error, upload, validate)
+├── routes/          # Route definitions (auth, note, admin, user)
+├── validators/      # express-validator rule sets
+└── index.ts         # App entry point
+```
 
 ### Database Models
 
@@ -48,7 +65,7 @@ notes/
 
 **Note**
 
-- `id`, `title`, `content`, `publish` (boolean), `userId` (FK → User), `createdAt`, `updatedAt`
+- `id`, `title`, `content`, `publish` (boolean), `userId` (FK → User, cascade delete), `createdAt`, `updatedAt`
 
 ### API Endpoints
 
@@ -56,12 +73,18 @@ Base URL: `http://localhost:8080/api/v1`
 
 #### Auth — `/auth`
 
-| Method   | Path             | Description                          |
-| -------- | ---------------- | ------------------------------------ |
-| `POST`   | `/auth/sign-up`  | Register a new user                  |
-| `POST`   | `/auth/sign-in`  | Log in and receive a JWT cookie      |
-| `DELETE` | `/auth/sign-out` | Log out (clear the JWT cookie)       |
-| `GET`    | `/auth/me`       | Get the currently authenticated user |
+| Method   | Path             | Description                          | Auth |
+| -------- | ---------------- | ------------------------------------ | ---- |
+| `POST`   | `/auth/sign-up`  | Register a new user                  |      |
+| `POST`   | `/auth/sign-in`  | Log in and receive a JWT cookie      |      |
+| `DELETE` | `/auth/sign-out` | Log out (clear the JWT cookie)       |      |
+| `GET`    | `/auth/me`       | Get the currently authenticated user | ✅   |
+
+#### User — `/user`
+
+| Method | Path       | Description                          | Auth |
+| ------ | ---------- | ------------------------------------ | ---- |
+| `GET`  | `/user/me` | Get the currently authenticated user | ✅   |
 
 #### Notes — `/notes`
 
@@ -122,6 +145,14 @@ bun run dev
 
 The server will start on `http://localhost:8080`.
 
+**Available scripts**
+
+| Script          | Description                                      |
+| --------------- | ------------------------------------------------ |
+| `bun run dev`   | Start dev server with hot reload (via `--watch`) |
+| `bun run build` | Generate Prisma client and compile to `dist/`    |
+| `bun run start` | Run the compiled production build                |
+
 ---
 
 ## 🌐 Front-end
@@ -130,11 +161,11 @@ The server will start on `http://localhost:8080`.
 
 | Tool                                                                      | Purpose                           |
 | ------------------------------------------------------------------------- | --------------------------------- |
-| [React 19](https://react.dev/)                                            | UI library                        |
+| [React 19](https://react.dev/)                                            | UI library (with React Compiler)  |
 | [Vite 7](https://vitejs.dev/)                                             | Build tool & dev server           |
 | [TypeScript](https://www.typescriptlang.org/)                             | Type safety                       |
 | [React Router 7](https://reactrouter.com/)                                | Client-side routing               |
-| [TanStack Query](https://tanstack.com/query)                              | Server state management & caching |
+| [TanStack Query 5](https://tanstack.com/query)                            | Server state management & caching |
 | [Axios](https://axios-http.com/)                                          | HTTP client                       |
 | [Tailwind CSS 4](https://tailwindcss.com/)                                | Utility-first styling             |
 | [shadcn/ui](https://ui.shadcn.com/)                                       | Accessible UI components          |
@@ -142,6 +173,8 @@ The server will start on `http://localhost:8080`.
 | [Sonner](https://sonner.emilkowal.ski/)                                   | Toast notifications               |
 | [next-themes](https://github.com/pacocoursey/next-themes)                 | Dark / light mode                 |
 | [Phosphor Icons](https://phosphoricons.com/)                              | Icon library                      |
+| [Lucide React](https://lucide.dev/)                                       | Supplementary icon library        |
+| [JetBrains Mono](https://www.jetbrains.com/lp/mono/)                      | Monospace font (via Fontsource)   |
 
 ### Pages & Routes
 
@@ -162,18 +195,35 @@ The server will start on `http://localhost:8080`.
 
 ```bash
 cd front-end
-bun install
+npm install
 ```
 
-**2. Start the development server**
+**2. Set up environment variables**
+
+Create a `.env.local` file in the `front-end/` directory:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080/api/v1
+```
+
+**3. Start the development server**
 
 ```bash
-bun run dev
+npm run dev
 ```
 
 The app will be available at `http://localhost:3000`.
 
 > **Note:** Make sure the back-end server is running at `http://localhost:8080` before starting the front-end.
+
+**Available scripts**
+
+| Script            | Description                          |
+| ----------------- | ------------------------------------ |
+| `npm run dev`     | Start Vite dev server                |
+| `npm run build`   | Type-check and build for production  |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint`    | Run ESLint across the project        |
 
 ---
 
@@ -186,7 +236,7 @@ Open two terminals and run both servers simultaneously:
 cd back-end && bun run dev
 
 # Terminal 2 — Front-end
-cd front-end && bun run dev
+cd front-end && npm run dev
 ```
 
 ---
@@ -195,12 +245,16 @@ cd front-end && bun run dev
 
 ```
 front-end/src/
-├── api/          # Axios API call functions (authApi, noteApi, adminApi)
+├── api/          # Axios API call functions (api, authApi, noteApi, adminApi)
+├── assets/       # Static assets (images, icons)
 ├── components/
 │   ├── ui/       # shadcn/ui base components
-│   └── web/      # App-specific components (NoteCard, Loading, etc.)
+│   ├── web/      # App-specific components (Header, Sidebar, NoteCard, SignInForm, SignUpForm, Loading)
+│   ├── mode-toggle.tsx    # Dark/light mode toggle button
+│   └── theme-provider.tsx # next-themes provider wrapper
 ├── hooks/        # TanStack Query hooks (useAuth, useNote, useAdmin)
 ├── layouts/      # Route layout wrappers (HomeLayout, AuthLayout, AdminLayout)
+├── lib/          # Shared utility functions (e.g. cn helper)
 ├── pages/
 │   ├── auth/     # SignInPage, SignUpPage
 │   ├── user/     # HomePage, NoteCreatePage, NoteDetailPage, EditNotePage, AboutPage
@@ -218,3 +272,5 @@ front-end/src/
 3. The client uses the `useMe` hook on app mount to restore the authenticated user into React context (`AppContext`)
 4. Protected API routes read and verify the cookie via `authMiddleware`
 5. Sign-out calls `DELETE /api/v1/auth/sign-out`, clearing the cookie server-side
+
+Set the `VITE_API_BASE_URL` environment variable in your Vercel project settings to point to your deployed back-end URL.
