@@ -2,6 +2,14 @@
 
 A full-stack note-taking application built with a modern TypeScript stack. Users can create, view, edit, and delete personal notes, with an admin dashboard for platform-level management.
 
+Here’s a preview of the app:
+
+![App Screenshot](app-screenshot.png "Notes App Homepage")
+
+Admin Dashboard View:
+
+![Dashboard Screenshot](dashboard-screenshot.png "Admin Dashboard")
+
 ---
 
 ## 📖 API Documentation
