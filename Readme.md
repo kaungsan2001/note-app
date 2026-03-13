@@ -4,6 +4,14 @@ A full-stack note-taking application built with a modern TypeScript stack. Users
 
 ---
 
+## 📖 API Documentation
+
+Interactive API docs are available via **Swagger UI** when the back-end is running:
+
+> **[http://localhost:8080/api/docs](http://localhost:8080/api/docs)**
+
+---
+
 ## ✨ Features
 
 - **Authentication** — Sign up, sign in, and sign out with JWT-based sessions stored in HTTP-only cookies
